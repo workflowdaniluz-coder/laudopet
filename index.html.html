@@ -1,424 +1,153 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>LaudoPet</title>
+<title>Laudo Veterinário</title>
 
 <style>
 
-*{
+body{
+font-family: Arial, Helvetica, sans-serif;
+background:#f4f7fb;
 margin:0;
 padding:0;
-box-sizing:border-box;
-}
-
-body{
-font-family:Segoe UI,system-ui;
-background:#f3f6fb;
-min-height:100vh;
 display:flex;
 justify-content:center;
-align-items:flex-start;
-padding:40px 16px;
 }
 
-.page{
-width:100%;
-max-width:580px;
-}
-
-.brand{
-display:flex;
-align-items:center;
-gap:12px;
-margin-bottom:28px;
-}
-
-.brand-icon{
-width:42px;
-height:42px;
-background:#1a73e8;
-border-radius:12px;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.brand-icon svg{
-width:22px;
-height:22px;
-fill:white;
-}
-
-.brand-name{
-font-size:24px;
-font-weight:700;
-letter-spacing:-0.5px;
-}
-
-.brand-name span{
-color:#1a73e8;
-}
-
-.card{
+.container{
+width:700px;
 background:white;
-border-radius:16px;
-padding:32px;
-border:1px solid #e7ecf2;
-box-shadow:0 8px 22px rgba(0,0,0,0.04);
+margin-top:40px;
+padding:40px;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
 }
 
-.card-title{
-font-size:18px;
-font-weight:600;
-margin-bottom:6px;
+h1{
+color:#1a73e8;
+margin-bottom:5px;
 }
 
-.card-subtitle{
-font-size:13px;
-color:#6b7280;
-margin-bottom:24px;
+.subtitle{
+color:#777;
+margin-bottom:30px;
 }
 
-.form-row{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:16px;
-}
-
-.form-group{
-margin-bottom:18px;
+.section{
+margin-bottom:25px;
 }
 
 label{
-font-size:13px;
-font-weight:600;
-margin-bottom:6px;
+font-weight:bold;
 display:block;
+margin-bottom:6px;
 }
 
-.required{
-color:#ef4444;
-}
-
-input,
-textarea{
+input, textarea{
 width:100%;
-padding:10px 14px;
-border-radius:8px;
-border:1.5px solid #e5e7eb;
-background:#fafafa;
+padding:12px;
+border:1px solid #ddd;
+border-radius:6px;
 font-size:14px;
 }
 
-input:focus,
-textarea:focus{
-outline:none;
-border-color:#1a73e8;
-background:white;
-}
-
 textarea{
-min-height:110px;
 resize:vertical;
+min-height:120px;
 }
 
-.upload-area{
-border:1.5px dashed #c4cdd6;
-border-radius:10px;
-padding:24px;
-text-align:center;
-cursor:pointer;
-background:#fafafa;
-position:relative;
-transition:all .2s;
+input[type=file]{
+border:none;
 }
 
-.upload-area:hover{
-border-color:#1a73e8;
-background:#f0f7ff;
-}
-
-.upload-area input{
-position:absolute;
-inset:0;
-opacity:0;
-cursor:pointer;
-}
-
-.upload-icon{
-width:38px;
-height:38px;
-margin:auto;
-background:#e8f0fe;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-margin-bottom:10px;
-}
-
-.upload-icon svg{
-width:18px;
-stroke:#1a73e8;
-fill:none;
-}
-
-.upload-text{
-font-size:13px;
-font-weight:600;
-}
-
-.upload-hint{
-font-size:12px;
-color:#9ca3af;
-}
-
-.file-preview{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin-top:12px;
-}
-
-.preview-item{
-width:74px;
-height:74px;
-position:relative;
-}
-
-.preview-item img{
+button{
+margin-top:20px;
 width:100%;
-height:100%;
-object-fit:cover;
-border-radius:8px;
-border:1px solid #e5e7eb;
-}
-
-.preview-count{
-margin-top:8px;
-font-size:12px;
-color:#6b7280;
-}
-
-.divider{
-height:1px;
-background:#f1f3f6;
-margin:24px 0;
-}
-
-.btn-submit{
-width:100%;
-padding:14px;
+padding:15px;
 background:#1a73e8;
 border:none;
-border-radius:10px;
 color:white;
-font-size:15px;
-font-weight:600;
+font-size:16px;
+font-weight:bold;
+border-radius:6px;
 cursor:pointer;
-transition:.2s;
+transition:0.2s;
 }
 
-.btn-submit:hover{
-background:#1557b0;
+button:hover{
+background:#0d5bd3;
 }
 
-.btn-submit:disabled{
-background:#9abcf2;
-cursor:not-allowed;
-}
-
-.alert{
-display:none;
-margin-top:16px;
-padding:14px;
-border-radius:10px;
-font-size:14px;
-}
-
-.alert.success{
-background:#ecfdf5;
-border:1px solid #a7f3d0;
-color:#065f46;
-}
-
-.alert.error{
-background:#fef2f2;
-border:1px solid #fecaca;
-color:#991b1b;
+.footer{
+margin-top:25px;
+font-size:12px;
+color:#999;
+text-align:center;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="page">
+<div class="container">
 
-<div class="brand">
-<div class="brand-icon">
-<svg viewBox="0 0 24 24">
-<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-</svg>
-</div>
+<h1>Laudo Veterinário</h1>
+<div class="subtitle">Gerar laudo clínico com imagens</div>
 
-<div class="brand-name">Laudo<span>Pet</span></div>
-</div>
-
-<div class="card">
-
-<div class="card-title">Cadastro de laudo veterinário</div>
-<div class="card-subtitle">Preencha os dados e envie as imagens do exame</div>
-
-<form id="laudoForm">
-
-<div class="form-row">
-
-<div class="form-group">
-<label>Nome do pet <span class="required">*</span></label>
-<input type="text" id="nome_pet" name="nome_pet" required>
-</div>
-
-<div class="form-group">
-<label>Nome do tutor <span class="required">*</span></label>
-<input type="text" id="nome_tutor" name="nome_tutor" required>
-</div>
-
-</div>
-
-<div class="form-row">
-
-<div class="form-group">
-<label>Telefone (WhatsApp) <span class="required">*</span></label>
-<input type="tel" id="telefone" name="telefone" required>
-</div>
-
-<div class="form-group">
-<label>E-mail</label>
-<input type="email" id="email" name="email">
-</div>
-
-</div>
-
-<div class="form-group">
-<label>Diagnóstico <span class="required">*</span></label>
-<textarea id="diagnostico" name="diagnostico" required></textarea>
-</div>
-
-<div class="form-group">
-
-<label>Imagens do ultrassom</label>
-
-<div class="upload-area">
-
-<input
-type="file"
-id="imagens"
-name="imagens"
-accept="image/*"
-multiple
-required
+<form 
+action="https://SEU-N8N/webhook/laudo-veterinaria" 
+method="POST" 
+target="_blank"
+enctype="multipart/form-data"
 >
 
-<div class="upload-icon">
-<svg viewBox="0 0 24 24" stroke-width="2">
-<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5"/>
-</svg>
+<div class="section">
+<label>Nome do Pet</label>
+<input type="text" name="nome_pet" required>
 </div>
 
-<div class="upload-text">Clique para selecionar imagens</div>
-<div class="upload-hint">PNG ou JPG</div>
-
+<div class="section">
+<label>Nome do Tutor</label>
+<input type="text" name="nome_tutor" required>
 </div>
 
-<div id="filePreview" class="file-preview"></div>
-<div id="fileCount" class="preview-count"></div>
-
+<div class="section">
+<label>Telefone</label>
+<input type="text" name="telefone">
 </div>
 
-<div class="divider"></div>
+<div class="section">
+<label>Email</label>
+<input type="email" name="email">
+</div>
 
-<button type="submit" class="btn-submit" id="submitBtn">
-Enviar laudo
+<div class="section">
+<label>Diagnóstico</label>
+<textarea name="diagnostico"></textarea>
+</div>
+
+<div class="section">
+<label>Imagens do exame</label>
+<input type="file" name="imagens" multiple accept="image/*">
+</div>
+
+<button type="submit">
+Gerar Laudo em PDF
 </button>
 
 </form>
 
-<div id="successMessage" class="alert success">
-Laudo enviado com sucesso!
-</div>
-
-<div id="errorMessage" class="alert error">
-Erro ao enviar o laudo.
+<div class="footer">
+Sistema de geração de laudos veterinários
 </div>
 
 </div>
-
-</div>
-
-<script>
-
-const fileInput=document.getElementById("imagens");
-const preview=document.getElementById("filePreview");
-const count=document.getElementById("fileCount");
-
-form.addEventListener('submit', async function(e) {
-  e.preventDefault();
-
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = 'Enviando...';
-
-  try {
-
-    const formData = new FormData();
-
-    formData.append("nome_pet", document.getElementById('nome_pet').value);
-    formData.append("nome_tutor", document.getElementById('nome_tutor').value);
-    formData.append("telefone", document.getElementById('telefone').value);
-    formData.append("email", document.getElementById('email').value);
-    formData.append("diagnostico", document.getElementById('diagnostico').value);
-
-    const files = fileInput.files;
-
-    for (let i = 0; i < files.length; i++) {
-      formData.append("imagens", files[i]);
-    }
-
-    const response = await fetch(
-      "https://n8n.srv1496054.hstgr.cloud/webhook-test/laudo-veterinaria",
-      {
-        method: "POST",
-        body: formData
-      }
-    );
-
-    if (response.ok) {
-
-      successMessage.style.display = 'flex';
-
-      form.reset();
-      filePreview.innerHTML = '';
-      fileCount.style.display = 'none';
-
-    } else {
-      throw new Error("Erro envio");
-    }
-
-  } catch (err) {
-
-    errorMessage.style.display = 'flex';
-
-  }
-
-  submitBtn.disabled = false;
-  submitBtn.innerHTML = 'Enviar laudo';
-
-});
-
-</script>
 
 </body>
 </html>
