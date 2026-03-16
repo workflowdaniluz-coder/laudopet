@@ -1,30 +1,28 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>Laudo Veterinário</title>
 
 <style>
 
 body{
-font-family: Arial, Helvetica, sans-serif;
+font-family: Arial, sans-serif;
 background:#f4f7fb;
-margin:0;
-padding:0;
 display:flex;
 justify-content:center;
+padding:40px;
 }
 
 .container{
-width:700px;
 background:white;
-margin-top:40px;
-padding:40px;
+padding:35px;
 border-radius:10px;
-box-shadow:0 10px 30px rgba(0,0,0,0.1);
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+width:700px;
 }
 
 h1{
@@ -33,39 +31,31 @@ margin-bottom:5px;
 }
 
 .subtitle{
-color:#777;
-margin-bottom:30px;
-}
-
-.section{
+color:#666;
 margin-bottom:25px;
 }
 
 label{
 font-weight:bold;
 display:block;
-margin-bottom:6px;
+margin-top:15px;
 }
 
 input, textarea{
 width:100%;
-padding:12px;
+padding:10px;
 border:1px solid #ddd;
 border-radius:6px;
-font-size:14px;
+margin-top:5px;
 }
 
 textarea{
-resize:vertical;
 min-height:120px;
-}
-
-input[type=file]{
-border:none;
+resize:vertical;
 }
 
 button{
-margin-top:20px;
+margin-top:25px;
 width:100%;
 padding:15px;
 background:#1a73e8;
@@ -75,18 +65,29 @@ font-size:16px;
 font-weight:bold;
 border-radius:6px;
 cursor:pointer;
-transition:0.2s;
 }
 
 button:hover{
-background:#0d5bd3;
+background:#1558c0;
 }
 
-.footer{
-margin-top:25px;
-font-size:12px;
-color:#999;
+.preview{
+margin-top:15px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+.preview img{
+width:100%;
+border-radius:6px;
+}
+
+.loading{
+display:none;
 text-align:center;
+margin-top:20px;
+color:#666;
 }
 
 </style>
@@ -98,56 +99,85 @@ text-align:center;
 <div class="container">
 
 <h1>Laudo Veterinário</h1>
-<div class="subtitle">Gerar laudo clínico com imagens</div>
+<div class="subtitle">Gerador automático de laudo clínico</div>
 
-<form 
-action="https://n8n.srv1496054.hstgr.cloud/webhook/laudo-veterinaria" 
-method="POST" 
+<form
+action="https://n8n.srv1496054.hstgr.cloud/webhook/laudo-veterinaria"
+method="POST"
 target="_blank"
 enctype="multipart/form-data"
+onsubmit="mostrarLoading()"
 >
 
-<div class="section">
 <label>Nome do Pet</label>
 <input type="text" name="nome_pet" required>
-</div>
 
-<div class="section">
 <label>Nome do Tutor</label>
 <input type="text" name="nome_tutor" required>
-</div>
 
-<div class="section">
 <label>Telefone</label>
 <input type="text" name="telefone">
-</div>
 
-<div class="section">
 <label>Email</label>
 <input type="email" name="email">
-</div>
 
-<div class="section">
 <label>Diagnóstico</label>
 <textarea name="diagnostico"></textarea>
-</div>
 
-<div class="section">
 <label>Imagens do exame</label>
-<input type="file" name="imagens" multiple accept="image/*">
-</div>
+<input type="file" name="imagens" id="imagens" multiple accept="image/*">
+
+<div class="preview" id="preview"></div>
 
 <button type="submit">
 Gerar Laudo em PDF
 </button>
 
+<div class="loading" id="loading">
+Gerando PDF... aguarde alguns segundos
+</div>
+
 </form>
 
-<div class="footer">
-Sistema de geração de laudos veterinários
 </div>
 
-</div>
+<script>
+
+const inputImagens = document.getElementById("imagens");
+const preview = document.getElementById("preview");
+
+inputImagens.addEventListener("change", function(){
+
+preview.innerHTML = "";
+
+const files = this.files;
+
+for(let i=0;i<files.length;i++){
+
+const reader = new FileReader();
+
+reader.onload = function(e){
+
+const img = document.createElement("img");
+img.src = e.target.result;
+
+preview.appendChild(img);
+
+}
+
+reader.readAsDataURL(files[i]);
+
+}
+
+});
+
+function mostrarLoading(){
+
+document.getElementById("loading").style.display = "block";
+
+}
+
+</script>
 
 </body>
 </html>
