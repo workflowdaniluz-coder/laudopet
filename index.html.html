@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaudoPet</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f4f8;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 32px 16px;
+  }
+  .page {
+    width: 100%;
+    max-width: 560px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .brand-icon {
+    width: 40px; height: 40px;
+    background: #1a73e8;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-icon svg { width: 22px; height: 22px; fill: white; }
+  .brand-name { font-size: 22px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.5px; }
+  .brand-name span { color: #1a73e8; }
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    border: 1px solid #e8ecf0;
+  }
+  .card-header { margin-bottom: 28px; }
+  .card-title { font-size: 17px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+  .card-subtitle { font-size: 13px; color: #6b7280; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group.full { grid-column: 1 / -1; }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+  }
+  .required { color: #ef4444; margin-left: 2px; }
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1a1a2e;
+    background: #fafafa;
+    transition: border-color 0.2s, background 0.2s;
+    font-family: inherit;
+  }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #1a73e8;
+    background: white;
+  }
+  input::placeholder, textarea::placeholder { color: #9ca3af; }
+  textarea { resize: vertical; min-height: 110px; line-height: 1.5; }
+  .upload-area {
+    border: 1.5px dashed #c4cdd6;
+    border-radius: 10px;
+    padding: 22px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: #fafafa;
+    position: relative;
+  }
+  .upload-area:hover { border-color: #1a73e8; background: #f0f7ff; }
+  .upload-area input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .upload-icon {
+    width: 36px; height: 36px;
+    background: #e8f0fe;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 10px;
+  }
+  .upload-icon svg { width: 18px; height: 18px; stroke: #1a73e8; fill: none; }
+  .upload-text { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 2px; }
+  .upload-hint { font-size: 12px; color: #9ca3af; }
+  .file-preview {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;
+  }
+  .preview-item {
+    position: relative; width: 72px; height: 72px;
+  }
+  .preview-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1.5px solid #e5e7eb;
+  }
+  .preview-count {
+    font-size: 12px; color: #6b7280; margin-top: 8px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .divider { height: 1px; background: #f3f4f6; margin: 8px 0 24px; }
+  .btn-submit {
+    width: 100%;
+    padding: 13px;
+    background: #1a73e8;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    font-family: inherit;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-submit:hover { background: #1557b0; }
+  .btn-submit:active { transform: scale(0.99); }
+  .btn-submit:disabled { background: #93b8f0; cursor: not-allowed; }
+  .btn-submit svg { width: 18px; height: 18px; stroke: white; fill: none; }
+  .alert {
+    display: none;
+    padding: 13px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 16px;
+    align-items: center;
+    gap: 10px;
+  }
+  .alert.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; display: flex; }
+  .alert.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; display: flex; }
+  .alert svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .input-group { display: flex; gap: 0; }
+  .input-prefix {
+    padding: 10px 12px;
+    background: #f3f4f6;
+    border: 1.5px solid #e5e7eb;
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    font-size: 13px;
+    color: #6b7280;
+    display: flex; align-items: center;
+    white-space: nowrap;
+  }
+  .input-group input {
+    border-radius: 0 8px 8px 0;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/><path d="M8.5 5.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5S10.83 7 10 7 8.5 6.33 8.5 5.5zM13 5.5c0-.83.67-1.5 1.5-1.5S16 4.67 16 5.5 15.33 7 14.5 7 13 6.33 13 5.5z"/></svg>
+    </div>
+    <div class="brand-name">Laudo<span>Pet</span></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Cadastro de laudo veterinário</div>
+      <div class="card-subtitle">Preencha os dados do paciente e anexe as imagens do exame</div>
+    </div>
+
+    <form id="laudoForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nome do pet <span class="required">*</span></label>
+          <input type="text" id="nome_pet" required placeholder="Ex: Rex">
+        </div>
+        <div class="form-group">
+          <label>Nome do tutor <span class="required">*</span></label>
+          <input type="text" id="nome_tutor" required placeholder="Ex: Maria Silva">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Telefone (WhatsApp) <span class="required">*</span></label>
+          <input type="tel" id="telefone" required placeholder="47999999999">
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" id="email" placeholder="maria@email.com">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Diagnóstico <span class="required">*</span></label>
+        <textarea id="diagnostico" required placeholder="Descreva o diagnóstico do exame de ultrassom..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Imagens do ultrassom <span class="required">*</span></label>
+        <div class="upload-area" id="uploadArea">
+          <input type="file" id="imagens" accept="image/*" multiple required>
+          <div class="upload-icon">
+            <svg viewBox="0 0 24 24" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          </div>
+          <div class="upload-text">Clique para selecionar imagens</div>
+          <div class="upload-hint">PNG, JPG, WEBP — múltiplos arquivos</div>
+        </div>
+        <div id="filePreview" class="file-preview"></div>
+        <div id="fileCount" class="preview-count" style="display:none">
+          <svg viewBox="0 0 24 24" width="14" height="14" stroke="#6b7280" fill="none" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          <span id="fileCountText"></span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">
+        <svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+        Enviar laudo
+      </button>
+    </form>
+
+    <div id="successMessage" class="alert success">
+      <svg viewBox="0 0 24 24" stroke="#065f46" stroke-width="2" fill="none"><path d="M22 11.08V12a10 10 0 11-5.93-9.14M22 4L12 14.01l-3-3"/></svg>
+      Laudo enviado com sucesso! O PDF será enviado por WhatsApp.
+    </div>
+    <div id="errorMessage" class="alert error">
+      <svg viewBox="0 0 24 24" stroke="#991b1b" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      Erro ao enviar. Verifique os dados e tente novamente.
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const fileInput = document.getElementById('imagens');
+  const filePreview = document.getElementById('filePreview');
+  const fileCount = document.getElementById('fileCount');
+  const fileCountText = document.getElementById('fileCountText');
+  const form = document.getElementById('laudoForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const successMessage = document.getElementById('successMessage');
+  const errorMessage = document.getElementById('errorMessage');
+
+  fileInput.addEventListener('change', function(e) {
+    filePreview.innerHTML = '';
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const item = document.createElement('div');
+        item.className = 'preview-item';
+        const img = document.createElement('img');
+        img.src = ev.target.result;
+        item.appendChild(img);
+        filePreview.appendChild(item);
+      };
+      reader.readAsDataURL(file);
+    });
+    if (files.length > 0) {
+      fileCount.style.display = 'flex';
+      fileCountText.textContent = files.length + (files.length === 1 ? ' imagem selecionada' : ' imagens selecionadas');
+    } else {
+      fileCount.style.display = 'none';
+    }
+  });
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" stroke="white" fill="none" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> Enviando...';
+    successMessage.style.display = 'none';
+    errorMessage.style.display = 'none';
+
+    try {
+      const files = Array.from(fileInput.files);
+      const imagens = [];
+      for (let file of files) {
+        const base64 = await fileToBase64(file);
+        imagens.push({
+          filename: file.name,
+          mimetype: file.type,
+          size: file.size,
+          data: base64.split(',')[1]
+        });
+      }
+      const data = {
+        nome_pet: document.getElementById('nome_pet').value,
+        nome_tutor: document.getElementById('nome_tutor').value,
+        telefone: document.getElementById('telefone').value,
+        email: document.getElementById('email').value,
+        diagnostico: document.getElementById('diagnostico').value,
+        imagens: imagens
+      };
+      const response = await fetch('http://localhost:5678/webhook-test/laudo-veterinaria', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (response.ok) {
+        successMessage.style.display = 'flex';
+        form.reset();
+        filePreview.innerHTML = '';
+        fileCount.style.display = 'none';
+      } else {
+        throw new Error('Erro no envio');
+      }
+    } catch (err) {
+      errorMessage.style.display = 'flex';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" stroke="white" fill="none" stroke-width="2"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg> Enviar laudo';
+    }
+  });
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+</script>
+</body>
+</html>
