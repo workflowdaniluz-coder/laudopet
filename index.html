@@ -209,17 +209,7 @@ select{
 .organ-status.edited{background:var(--teal-light);color:var(--teal-dark)}
 .organ-body{display:none;padding:12px 14px;border-top:1px solid var(--border)}
 .organ-section.open .organ-body{display:block}
-.organ-default-text{
-  font-size:11px;color:var(--slate-light);line-height:1.6;margin-bottom:10px;
-  padding:8px 10px;background:rgba(26,58,92,.03);border-radius:6px;
-  border-left:3px solid var(--navy-light);position:relative;
-}
-.organ-default-text::before{
-  content:'📋 Texto de referência — não vai para o laudo';
-  display:block;font-size:9px;font-weight:600;text-transform:uppercase;
-  letter-spacing:.05em;color:var(--amber);margin-bottom:4px;
-}
-.organ-default-text b,.organ-default-text strong{color:var(--slate-mid);font-weight:600}
+/* organ editor is pre-filled with default text */
 
 /* GI Table (feline) */
 .gi-table{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}
@@ -698,15 +688,18 @@ function buildOrgans() {
 
   tmpl.organs.forEach(organ => {
     const section = document.createElement("div");
-    section.className = "organ-section";
+    section.className = "organ-section open"; // open by default
     section.dataset.organId = organ.id;
     if (organ.conditional) section.dataset.conditional = organ.conditional;
 
-    let bodyHTML = `<div class="organ-default-text">${organ.text.replace(/\n/g, '<br>')}</div>`;
+    // Pre-fill editor with default text
+    const defaultContent = organ.text.replace(/\n/g, '<br>');
+
+    let bodyHTML = '';
 
     // GI Table for feline
     if (organ.giTable && organ.giSegments) {
-      bodyHTML += `<div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--teal-dark);margin:10px 0 4px;display:flex;align-items:center;gap:4px">📊 Tabela de referência — vai para o PDF</div>`;
+      bodyHTML += `<div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--teal-dark);margin:0 0 8px;display:flex;align-items:center;gap:4px">📊 Tabela de referência — vai para o PDF</div>`;
       bodyHTML += `<table class="gi-table"><thead><tr><th>Segmento GI</th><th>Medida</th><th>Valor de Referência</th></tr></thead><tbody>`;
       organ.giSegments.forEach(seg => {
         bodyHTML += `<tr><td>${seg.name}</td><td><input type="text" class="gi-input" data-seg="${seg.name}" placeholder="cm"></td><td class="gi-ref">${seg.ref}</td></tr>`;
@@ -726,14 +719,14 @@ function buildOrgans() {
           <button type="button" class="toolbar-btn" data-cmd="removeFormat" data-editor="organ-${organ.id}">Limpar</button>
         </div>
         <div class="editor-content" id="editor-organ-${organ.id}" contenteditable="true"
-          data-placeholder="Descreva os achados de ${organ.name}..."></div>
+          data-placeholder="Descreva os achados de ${organ.name}...">${defaultContent}</div>
       </div>`;
 
     section.innerHTML = `
       <div class="organ-header" onclick="toggleOrgan(this)">
         <span class="organ-toggle">▶</span>
         <span class="organ-name">${organ.name}</span>
-        <span class="organ-status" id="status-${organ.id}">Vazio</span>
+        <span class="organ-status" id="status-${organ.id}">Padrão</span>
       </div>
       <div class="organ-body">${bodyHTML}</div>`;
 
@@ -754,14 +747,16 @@ function toggleOrgan(header) {
 
 function bindOrganEditors() {
   document.querySelectorAll('[id^="editor-organ-"]').forEach(editor => {
+    // Store original content for comparison
+    editor.dataset.originalContent = editor.innerHTML;
     editor.addEventListener('input', () => {
       const organId = editor.id.replace('editor-organ-', '');
       const status = document.getElementById('status-' + organId);
-      if (editor.innerHTML.trim()) {
-        status.textContent = 'Preenchido';
+      if (editor.innerHTML !== editor.dataset.originalContent) {
+        status.textContent = 'Editado';
         status.className = 'organ-status edited';
       } else {
-        status.textContent = 'Vazio';
+        status.textContent = 'Padrão';
         status.className = 'organ-status';
       }
     });
@@ -998,8 +993,9 @@ document.getElementById("form-laudo").addEventListener("submit", async function(
       }
 
       // Only include organ if editor has content OR it has a GI table
-      if (customText || giTableHTML) {
-        achadosHTML += `<p><b>${organ.name}:</b> ${customText}</p>`;
+      const content = customText || '';
+      if (content || giTableHTML) {
+        achadosHTML += `<p><b>${organ.name}:</b> ${content}</p>`;
         if (giTableHTML) achadosHTML += giTableHTML;
       }
     });
