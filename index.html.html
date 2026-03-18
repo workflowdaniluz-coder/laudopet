@@ -4,356 +4,423 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LaudoVet · Catherine Bicca Fragoso</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #1a3a5c; --navy-dark: #112644; --navy-light: #e8f0f8;
-    --teal: #0d9488; --teal-dark: #0f766e; --teal-light: #ccfbf1;
-    --slate: #1e293b; --slate-mid: #475569; --slate-light: #94a3b8;
-    --bg: #f1f5f9; --white: #ffffff; --border: #e2e8f0; --whatsapp: #25d366;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); min-height: 100vh; color: var(--slate); }
+:root {
+  --navy: #1a3a5c; --navy-dark: #112644; --navy-light: #e8f0f8;
+  --teal: #0d9488; --teal-dark: #0f766e; --teal-light: #ccfbf1;
+  --slate: #1e293b; --slate-mid: #475569; --slate-light: #94a3b8;
+  --bg: #f1f5f9; --white: #ffffff; --border: #e2e8f0; --whatsapp: #25d366;
+  --danger: #ef4444; --amber: #f59e0b;
+  --panel-left: 55%; --panel-right: 45%;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);min-height:100vh;color:var(--slate)}
 
-  #tela-form { display: flex; min-height: 100vh; }
+/* ═══════ TOP BAR ═══════ */
+.topbar{
+  background:var(--navy);padding:14px 28px;display:flex;align-items:center;gap:20px;
+  position:sticky;top:0;z-index:100;
+}
+.topbar-logo{font-family:'DM Serif Display',serif;font-size:20px;color:#fff}
+.topbar-logo span{color:#7dd3c8}
+.topbar-sub{font-size:10px;color:rgba(255,255,255,.4);font-weight:300}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.topbar-species{
+  display:flex;gap:2px;background:rgba(255,255,255,.08);border-radius:8px;padding:3px;
+}
+.species-btn{
+  padding:7px 16px;border:none;border-radius:6px;font-family:'DM Sans',sans-serif;
+  font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;
+  background:transparent;color:rgba(255,255,255,.5);
+}
+.species-btn.active{background:var(--teal);color:#fff;box-shadow:0 2px 8px rgba(13,148,136,.3)}
+.species-btn:hover:not(.active){color:rgba(255,255,255,.8)}
 
-  .sidebar {
-    width: 300px; background: var(--navy); padding: 40px 28px;
-    display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; flex-shrink: 0;
-  }
-  .sidebar-logo { font-family: 'DM Serif Display', serif; font-size: 24px; color: var(--white); margin-bottom: 4px; }
-  .sidebar-logo span { color: #7dd3c8; }
-  .sidebar-sub { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 40px; font-weight: 300; }
-  .sidebar-steps { display: flex; flex-direction: column; gap: 22px; flex: 1; }
-  .step { display: flex; gap: 14px; align-items: flex-start; }
-  .step-num {
-    width: 26px; height: 26px; border-radius: 50%;
-    background: rgba(125,211,200,0.15); border: 1.5px solid rgba(125,211,200,0.4);
-    color: #7dd3c8; font-size: 11px; font-weight: 600;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
-  }
-  .step-text strong { display: block; color: var(--white); font-size: 13px; font-weight: 500; margin-bottom: 2px; }
-  .step-text span { font-size: 11px; color: rgba(255,255,255,0.38); font-weight: 300; line-height: 1.5; }
-  .sidebar-footer { font-size: 10px; color: rgba(255,255,255,0.22); font-weight: 300; margin-top: auto; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.07); }
+/* ═══════ MAIN LAYOUT: TWO COLUMNS ═══════ */
+.main-layout{display:flex;height:calc(100vh - 52px);overflow:hidden}
 
-  .form-area { flex: 1; padding: 40px 48px; max-width: 820px; overflow-y: auto; }
-  .form-title { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--navy); margin-bottom: 4px; }
-  .form-subtitle { font-size: 13px; color: var(--slate-light); margin-bottom: 32px; }
-  .form-section { margin-bottom: 28px; }
+/* LEFT: FORM */
+.panel-form{
+  width:var(--panel-left);overflow-y:auto;padding:28px 32px 40px;
+  border-right:1px solid var(--border);background:var(--white);
+}
+.panel-form::-webkit-scrollbar{width:5px}
+.panel-form::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
 
-  .section-label {
-    font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--navy); margin-bottom: 14px; padding-bottom: 8px;
-    border-bottom: 1.5px solid var(--navy-light); display: flex; align-items: center; gap: 8px;
-  }
-  .section-label::before { content: ''; display: block; width: 3px; height: 14px; background: var(--teal); border-radius: 2px; }
+/* RIGHT: IMAGE VIEWER */
+.panel-images{
+  width:var(--panel-right);display:flex;flex-direction:column;background:#1a1d21;
+  position:relative;
+}
+.images-header{
+  padding:14px 20px;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+}
+.images-header-title{font-size:12px;font-weight:600;color:rgba(255,255,255,.7);letter-spacing:.05em;text-transform:uppercase}
+.images-count{
+  font-size:10px;padding:2px 8px;border-radius:99px;
+  background:var(--teal);color:#fff;font-weight:600;
+}
 
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-  .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
-  .form-group:last-child { margin-bottom: 0; }
+/* Thumbnail strip */
+.thumb-strip{
+  display:flex;gap:8px;padding:12px 20px;overflow-x:auto;flex-shrink:0;
+  border-bottom:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.15);
+}
+.thumb-strip::-webkit-scrollbar{height:4px}
+.thumb-strip::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);border-radius:9px}
+.thumb-item{
+  width:60px;height:60px;border-radius:6px;overflow:hidden;cursor:pointer;
+  border:2px solid transparent;flex-shrink:0;transition:all .2s;position:relative;
+}
+.thumb-item img{width:100%;height:100%;object-fit:cover}
+.thumb-item.active{border-color:var(--teal);box-shadow:0 0 0 2px rgba(13,148,136,.3)}
+.thumb-item:hover:not(.active){border-color:rgba(255,255,255,.3)}
+.thumb-remove{
+  position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;
+  background:var(--danger);color:#fff;border:2px solid #1a1d21;font-size:10px;
+  cursor:pointer;display:none;align-items:center;justify-content:center;font-weight:700;
+  line-height:1;
+}
+.thumb-item:hover .thumb-remove{display:flex}
 
-  label { font-size: 12px; font-weight: 500; color: var(--slate); }
-  label .req { color: var(--teal); margin-left: 2px; }
+/* Main viewer */
+.image-viewer{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;cursor:grab;
+}
+.image-viewer.dragging{cursor:grabbing}
+.image-viewer img{
+  max-width:95%;max-height:95%;object-fit:contain;border-radius:4px;
+  transition:transform .15s ease;transform-origin:center center;
+  user-select:none;-webkit-user-drag:none;
+}
+.viewer-empty{
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  color:rgba(255,255,255,.25);
+}
+.viewer-empty-icon{font-size:48px;opacity:.4}
+.viewer-empty-text{font-size:13px;font-weight:400}
 
-  input, textarea, select {
-    padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 8px;
-    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--slate);
-    background: var(--white); transition: border-color 0.2s, box-shadow 0.2s;
-    outline: none; width: 100%; appearance: none;
-  }
-  input:focus, textarea:focus, select:focus {
-    border-color: var(--navy); box-shadow: 0 0 0 3px rgba(26,58,92,0.08);
-  }
-  textarea { min-height: 100px; resize: vertical; }
-  select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
-  }
+/* Zoom controls */
+.zoom-controls{
+  position:absolute;bottom:16px;right:16px;display:flex;gap:4px;
+  background:rgba(0,0,0,.6);border-radius:8px;padding:4px;backdrop-filter:blur(8px);
+}
+.zoom-btn{
+  width:32px;height:32px;border:none;border-radius:6px;background:transparent;
+  color:#fff;font-size:16px;cursor:pointer;transition:background .15s;
+  display:flex;align-items:center;justify-content:center;
+}
+.zoom-btn:hover{background:rgba(255,255,255,.12)}
+.zoom-level{
+  color:rgba(255,255,255,.6);font-size:11px;font-family:'JetBrains Mono',monospace;
+  display:flex;align-items:center;padding:0 6px;min-width:44px;justify-content:center;
+}
 
-  /* ── EDITOR RICO ── */
-  .editor-wrapper { border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; background: var(--white); transition: border-color 0.2s, box-shadow 0.2s; }
-  .editor-wrapper:focus-within { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(26,58,92,0.08); }
+/* Upload drop zone in image panel */
+.upload-zone{
+  padding:12px 20px;flex-shrink:0;border-top:1px solid rgba(255,255,255,.06);
+  background:rgba(0,0,0,.1);
+}
+.upload-area{
+  border:2px dashed rgba(255,255,255,.12);border-radius:10px;padding:16px;
+  text-align:center;cursor:pointer;transition:all .2s;position:relative;
+}
+.upload-area:hover{border-color:var(--teal);background:rgba(13,148,136,.06)}
+.upload-area.dragover{border-color:var(--teal);background:rgba(13,148,136,.1)}
+.upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-text{font-size:12px;color:rgba(255,255,255,.4);font-weight:500}
+.upload-hint{font-size:10px;color:rgba(255,255,255,.2);margin-top:2px}
 
-  .editor-toolbar {
-    display: flex; gap: 2px; padding: 6px 8px;
-    background: #f8fafc; border-bottom: 1px solid var(--border); flex-wrap: wrap;
-  }
-  .toolbar-btn {
-    padding: 4px 8px; border: 1px solid transparent; border-radius: 5px;
-    background: transparent; cursor: pointer; font-size: 12px; color: var(--slate-mid);
-    font-family: 'DM Sans', sans-serif; font-weight: 500;
-    transition: all 0.15s; line-height: 1;
-  }
-  .toolbar-btn:hover { background: var(--navy-light); color: var(--navy); border-color: var(--border); }
-  .toolbar-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
-  .toolbar-sep { width: 1px; background: var(--border); margin: 2px 4px; }
+/* ═══════ FORM STYLES ═══════ */
+.form-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--navy);margin-bottom:2px}
+.form-subtitle{font-size:12px;color:var(--slate-light);margin-bottom:24px}
 
-  .editor-content {
-    min-height: 130px; padding: 10px 13px;
-    font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--slate);
-    outline: none; line-height: 1.7;
-  }
-  .editor-content:empty::before { content: attr(data-placeholder); color: var(--slate-light); pointer-events: none; }
-  .editor-content b, .editor-content strong { font-weight: 600; }
-  .editor-content i, .editor-content em { font-style: italic; }
-  .editor-content ul { padding-left: 20px; }
-  .editor-content ol { padding-left: 20px; }
+.section-label{
+  font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--navy);margin-bottom:12px;padding-bottom:8px;
+  border-bottom:1.5px solid var(--navy-light);display:flex;align-items:center;gap:8px;
+}
+.section-label::before{content:'';display:block;width:3px;height:14px;background:var(--teal);border-radius:2px}
+.form-section{margin-bottom:24px}
 
-  /* ── UPLOAD / PREVIEW ── */
-  .upload-area {
-    border: 2px dashed var(--border); border-radius: 10px;
-    padding: 24px; text-align: center; cursor: pointer;
-    transition: all 0.2s; background: var(--white); position: relative;
-  }
-  .upload-area:hover { border-color: var(--teal); background: var(--teal-light); }
-  .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-  .upload-icon { font-size: 28px; margin-bottom: 6px; }
-  .upload-text { font-size: 13px; color: var(--slate-mid); font-weight: 500; }
-  .upload-hint { font-size: 11px; color: var(--slate-light); margin-top: 3px; }
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.form-group{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
+label{font-size:11px;font-weight:500;color:var(--slate)}
+label .req{color:var(--teal);margin-left:2px}
 
-  .preview-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
-  .preview-item { position: relative; }
-  .preview-item img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; border: 1.5px solid var(--border); display: block; }
-  .preview-remove {
-    position: absolute; top: -6px; right: -6px;
-    width: 20px; height: 20px; border-radius: 50%;
-    background: #ef4444; color: white; border: 2px solid white;
-    font-size: 11px; font-weight: 700; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    line-height: 1; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    transition: background 0.15s;
-  }
-  .preview-remove:hover { background: #dc2626; }
+input,textarea,select{
+  padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;
+  font-family:'DM Sans',sans-serif;font-size:12px;color:var(--slate);
+  background:var(--white);transition:border-color .2s,box-shadow .2s;
+  outline:none;width:100%;appearance:none;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,58,92,.08)}
+textarea{min-height:80px;resize:vertical}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:32px;
+}
 
-  /* ── BOTÃO SUBMIT ── */
-  .btn-submit {
-    width: 100%; padding: 14px; background: var(--navy); border: none;
-    color: white; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
-    border-radius: 10px; cursor: pointer; transition: background 0.2s, transform 0.1s; margin-top: 8px;
-  }
-  .btn-submit:hover { background: var(--navy-dark); }
-  .btn-submit:active { transform: scale(0.99); }
-  .btn-submit:disabled { background: var(--slate-light); cursor: not-allowed; }
+/* ── RICH EDITOR ── */
+.editor-wrapper{border:1.5px solid var(--border);border-radius:7px;overflow:hidden;background:var(--white);transition:border-color .2s,box-shadow .2s}
+.editor-wrapper:focus-within{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,58,92,.08)}
+.editor-toolbar{
+  display:flex;gap:2px;padding:5px 8px;background:#f8fafc;border-bottom:1px solid var(--border);flex-wrap:wrap;
+}
+.toolbar-btn{
+  padding:3px 7px;border:1px solid transparent;border-radius:4px;
+  background:transparent;cursor:pointer;font-size:11px;color:var(--slate-mid);
+  font-family:'DM Sans',sans-serif;font-weight:500;transition:all .15s;line-height:1;
+}
+.toolbar-btn:hover{background:var(--navy-light);color:var(--navy);border-color:var(--border)}
+.toolbar-btn.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.toolbar-sep{width:1px;background:var(--border);margin:2px 4px}
+.editor-content{
+  min-height:100px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:12px;
+  color:var(--slate);outline:none;line-height:1.7;
+}
+.editor-content:empty::before{content:attr(data-placeholder);color:var(--slate-light);pointer-events:none}
+.editor-content b,.editor-content strong{font-weight:600}
+.editor-content ul,.editor-content ol{padding-left:20px}
 
-  .loading-bar { display: none; margin-top: 14px; background: var(--border); border-radius: 99px; height: 3px; overflow: hidden; }
-  .loading-bar.show { display: block; }
-  .loading-bar-inner { height: 100%; background: var(--teal); border-radius: 99px; animation: loadbar 2s ease-in-out infinite; }
-  @keyframes loadbar { 0%{width:0%;margin-left:0} 50%{width:70%;margin-left:15%} 100%{width:0%;margin-left:100%} }
-  .loading-text { display: none; text-align: center; font-size: 12px; color: var(--slate-light); margin-top: 8px; }
-  .loading-text.show { display: block; }
+/* ── ORGAN SECTIONS ── */
+.organ-section{
+  background:#f8fafc;border:1px solid var(--border);border-radius:8px;
+  margin-bottom:10px;overflow:hidden;
+}
+.organ-header{
+  padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;
+  transition:background .15s;user-select:none;
+}
+.organ-header:hover{background:var(--navy-light)}
+.organ-toggle{
+  font-size:10px;color:var(--slate-light);transition:transform .2s;flex-shrink:0;
+}
+.organ-section.open .organ-toggle{transform:rotate(90deg)}
+.organ-name{font-size:12px;font-weight:600;color:var(--navy);flex:1}
+.organ-status{
+  font-size:9px;padding:2px 8px;border-radius:99px;font-weight:600;
+  background:var(--navy-light);color:var(--navy);
+}
+.organ-status.edited{background:var(--teal-light);color:var(--teal-dark)}
+.organ-body{display:none;padding:12px 14px;border-top:1px solid var(--border)}
+.organ-section.open .organ-body{display:block}
+.organ-default-text{
+  font-size:11px;color:var(--slate-light);line-height:1.6;margin-bottom:10px;
+  padding:8px 10px;background:rgba(26,58,92,.03);border-radius:6px;
+  border-left:3px solid var(--navy-light);position:relative;
+}
+.organ-default-text::before{
+  content:'📋 Texto de referência — não vai para o laudo';
+  display:block;font-size:9px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--amber);margin-bottom:4px;
+}
+.organ-default-text b,.organ-default-text strong{color:var(--slate-mid);font-weight:600}
 
-  /* ── TELA PRÉVIA ── */
-  #tela-previa { display: none; min-height: 100vh; flex-direction: column; }
-  .previa-header { background: var(--navy); padding: 16px 36px; display: flex; align-items: center; justify-content: space-between; }
-  .previa-header-left { font-family: 'DM Serif Display', serif; font-size: 19px; color: var(--white); }
-  .previa-header-left span { color: #7dd3c8; }
-  .previa-actions { display: flex; gap: 10px; align-items: center; }
+/* GI Table (feline) */
+.gi-table{width:100%;border-collapse:collapse;font-size:11px;margin:10px 0}
+.gi-table th{text-align:left;padding:6px 8px;background:var(--navy);color:#fff;font-weight:500;font-size:10px}
+.gi-table td{padding:5px 8px;border-bottom:1px solid var(--border)}
+.gi-table tr:nth-child(even){background:rgba(0,0,0,.02)}
+.gi-table input{padding:5px 8px;font-size:11px;border-radius:5px;width:80px}
+.gi-ref{color:var(--slate-light);font-size:10px;font-family:'JetBrains Mono',monospace}
 
-  .btn-voltar {
-    padding: 8px 16px; background: transparent; border: 1.5px solid rgba(255,255,255,0.18);
-    color: rgba(255,255,255,0.65); font-family: 'DM Sans', sans-serif; font-size: 12px;
-    font-weight: 500; border-radius: 8px; cursor: pointer; transition: all 0.2s;
-  }
-  .btn-voltar:hover { border-color: rgba(255,255,255,0.45); color: white; }
+/* ── SUBMIT / ACTIONS ── */
+.form-actions{display:flex;gap:10px;margin-top:8px}
+.btn-submit{
+  flex:1;padding:13px;background:var(--navy);border:none;color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+  border-radius:9px;cursor:pointer;transition:background .2s,transform .1s;
+}
+.btn-submit:hover{background:var(--navy-dark)}
+.btn-submit:active{transform:scale(.99)}
+.btn-submit:disabled{background:var(--slate-light);cursor:not-allowed}
 
-  .btn-baixar {
-    padding: 8px 18px; background: var(--teal); border: none; color: white;
-    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
-    border-radius: 8px; cursor: pointer; transition: background 0.2s;
-    display: flex; align-items: center; gap: 7px; text-decoration: none;
-  }
-  .btn-baixar:hover { background: var(--teal-dark); }
+.loading-bar{display:none;margin-top:12px;background:var(--border);border-radius:99px;height:3px;overflow:hidden}
+.loading-bar.show{display:block}
+.loading-bar-inner{height:100%;background:var(--teal);border-radius:99px;animation:loadbar 2s ease-in-out infinite}
+@keyframes loadbar{0%{width:0%;margin-left:0}50%{width:70%;margin-left:15%}100%{width:0%;margin-left:100%}}
+.loading-text{display:none;text-align:center;font-size:11px;color:var(--slate-light);margin-top:6px}
+.loading-text.show{display:block}
 
-  .btn-whatsapp {
-    padding: 8px 18px; background: var(--whatsapp); border: none; color: white;
-    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
-    border-radius: 8px; cursor: pointer; transition: background 0.2s;
-    display: flex; align-items: center; gap: 7px;
-  }
-  .btn-whatsapp:hover:not(:disabled) { background: #1da851; }
-  .btn-whatsapp:disabled { background: #94a3b8; cursor: not-allowed; }
+/* ═══════ TELA PRÉVIA ═══════ */
+#tela-previa{display:none;min-height:100vh;flex-direction:column}
+.previa-header{background:var(--navy);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.previa-header-left{font-family:'DM Serif Display',serif;font-size:18px;color:#fff}
+.previa-header-left span{color:#7dd3c8}
+.previa-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn-voltar{
+  padding:7px 14px;background:transparent;border:1.5px solid rgba(255,255,255,.18);
+  color:rgba(255,255,255,.65);font-family:'DM Sans',sans-serif;font-size:11px;
+  font-weight:500;border-radius:7px;cursor:pointer;transition:all .2s;
+}
+.btn-voltar:hover{border-color:rgba(255,255,255,.45);color:#fff}
+.btn-baixar{
+  padding:7px 16px;background:var(--teal);border:none;color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;
+  border-radius:7px;cursor:pointer;transition:background .2s;
+  display:flex;align-items:center;gap:6px;text-decoration:none;
+}
+.btn-baixar:hover{background:var(--teal-dark)}
+.btn-whatsapp{
+  padding:7px 16px;background:var(--whatsapp);border:none;color:#fff;
+  font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;
+  border-radius:7px;cursor:pointer;transition:background .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.btn-whatsapp:hover:not(:disabled){background:#1da851}
+.btn-whatsapp:disabled{background:var(--slate-light);cursor:not-allowed}
+.previa-body{flex:1;display:flex;background:#3a3d40;padding:24px;justify-content:center}
+#pdf-iframe{width:100%;max-width:860px;height:calc(100vh - 110px);border:none;border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+.info-bar{
+  background:var(--white);border-top:1px solid var(--border);
+  padding:10px 28px;display:flex;align-items:center;gap:16px;
+  font-size:11px;color:var(--slate-mid);flex-wrap:wrap;
+}
+.info-bar strong{color:var(--slate);font-weight:600}
+.wpp-status{margin-left:auto;font-size:10px;padding:3px 10px;border-radius:99px;font-weight:500;background:#dcfce7;color:#16a34a}
 
-  .previa-body { flex: 1; display: flex; background: #3a3d40; padding: 28px; justify-content: center; }
-  #pdf-iframe { width: 100%; max-width: 860px; height: calc(100vh - 120px); border: none; border-radius: 4px; box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
-
-  .info-bar {
-    background: var(--white); border-top: 1px solid var(--border);
-    padding: 12px 36px; display: flex; align-items: center; gap: 20px;
-    font-size: 12px; color: var(--slate-mid); flex-wrap: wrap;
-  }
-  .info-bar strong { color: var(--slate); font-weight: 600; }
-  .wpp-status { margin-left: auto; font-size: 11px; padding: 4px 10px; border-radius: 99px; font-weight: 500; background: #dcfce7; color: #16a34a; }
-
-  @media (max-width: 768px) {
-    #tela-form { flex-direction: column; }
-    .sidebar { width: 100%; height: auto; position: relative; padding: 24px 20px; }
-    .form-area { padding: 24px 20px; max-width: 100%; }
-    .form-row, .form-row-3 { grid-template-columns: 1fr; }
-    .previa-header { padding: 12px 16px; flex-direction: column; gap: 10px; }
-    .previa-body { padding: 12px; }
-    .info-bar { padding: 10px 16px; }
-  }
+/* ═══════ RESPONSIVE ═══════ */
+@media(max-width:900px){
+  .main-layout{flex-direction:column;height:auto}
+  .panel-form,.panel-images{width:100%}
+  .panel-images{height:50vh}
+  .form-row,.form-row-3{grid-template-columns:1fr}
+  :root{--panel-left:100%;--panel-right:100%}
+}
 </style>
 </head>
 <body>
 
-<div id="tela-form">
-  <div class="sidebar">
-    <div class="sidebar-logo">Laudo<span>Vet</span></div>
-    <div class="sidebar-sub">M.V. Catherine Bicca Fragoso · CRMV/RS 20340</div>
-    <div class="sidebar-steps">
-      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Paciente</strong><span>Nome do pet e do tutor</span></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Dados clínicos</strong><span>Espécie, raça, peso, suspeita</span></div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Achados</strong><span>Relatório ultrassonográfico</span></div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Diagnóstico</strong><span>Impressão diagnóstica final</span></div></div>
-      <div class="step"><div class="step-num">5</div><div class="step-text"><strong>Imagens</strong><span>Fotos do exame</span></div></div>
-      <div class="step"><div class="step-num">6</div><div class="step-text"><strong>PDF + WhatsApp</strong><span>Prévia e envio automático</span></div></div>
-    </div>
-    <div class="sidebar-footer">Laudos veterinários · Uso clínico interno</div>
+<!-- ═══════ TOP BAR ═══════ -->
+<div class="topbar">
+  <div>
+    <div class="topbar-logo">Laudo<span>Vet</span></div>
+    <div class="topbar-sub">M.V. Catherine Bicca Fragoso · CRMV/RS 20340</div>
   </div>
-
-  <div class="form-area">
-    <div class="form-title">Novo Laudo</div>
-    <div class="form-subtitle">Preencha as informações para gerar o relatório ultrassonográfico em PDF</div>
-
-    <form id="form-laudo">
-
-      <!-- PACIENTE -->
-      <div class="form-section">
-        <div class="section-label">Identificação do Paciente</div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nome do Pet <span class="req">*</span></label>
-            <input type="text" name="nome_pet" required placeholder="Ex: Thor">
-          </div>
-          <div class="form-group">
-            <label>Nome do Tutor <span class="req">*</span></label>
-            <input type="text" name="nome_tutor" required placeholder="Ex: Claudia Silva">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Telefone <span class="req">*</span></label>
-            <input type="text" name="telefone" required placeholder="(51) 99999-9999">
-          </div>
-          <div class="form-group">
-            <label>Requisitante</label>
-            <input type="text" name="requisitante" placeholder="Ex: Belle Sorelle">
-          </div>
-        </div>
-      </div>
-
-      <!-- DADOS CLÍNICOS -->
-      <div class="form-section">
-        <div class="section-label">Dados Clínicos</div>
-        <div class="form-row-3">
-          <div class="form-group">
-            <label>Espécie</label>
-            <select name="especie">
-              <option value="">Selecione</option>
-              <option value="Canina">Canina</option>
-              <option value="Felina">Felina</option>
-              <option value="Aviária">Aviária</option>
-              <option value="Outra">Outra</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Sexo</label>
-            <select name="sexo">
-              <option value="">Selecione</option>
-              <option value="Macho">Macho</option>
-              <option value="Fêmea">Fêmea</option>
-              <option value="Macho castrado">Macho castrado</option>
-              <option value="Fêmea castrada">Fêmea castrada</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Raça</label>
-            <input type="text" name="raca" placeholder="Ex: SRD, Labrador">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Idade</label>
-            <input type="text" name="idade" placeholder="Ex: 3 anos">
-          </div>
-          <div class="form-group">
-            <label>Peso</label>
-            <input type="text" name="peso" placeholder="Ex: 16kg">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Suspeita Clínica</label>
-          <input type="text" name="suspeita" placeholder="Ex: Vômitos, dor abdominal">
-        </div>
-      </div>
-
-      <!-- ACHADOS -->
-      <div class="form-section">
-        <div class="section-label">Relatório Ultrassonográfico — Achados</div>
-        <div class="form-group">
-          <label>Descrição dos achados <span class="req">*</span></label>
-          <div class="editor-wrapper" id="wrapper-achados">
-            <div class="editor-toolbar" id="toolbar-achados">
-              <button type="button" class="toolbar-btn" data-cmd="bold" data-editor="achados"><b>N</b></button>
-              <button type="button" class="toolbar-btn" data-cmd="italic" data-editor="achados"><i>I</i></button>
-              <button type="button" class="toolbar-btn" data-cmd="underline" data-editor="achados"><u>S</u></button>
-              <div class="toolbar-sep"></div>
-              <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList" data-editor="achados">• Lista</button>
-              <button type="button" class="toolbar-btn" data-cmd="insertOrderedList" data-editor="achados">1. Lista</button>
-              <div class="toolbar-sep"></div>
-              <button type="button" class="toolbar-btn" data-cmd="removeFormat" data-editor="achados">Limpar</button>
-            </div>
-            <div class="editor-content" id="editor-achados" contenteditable="true"
-              data-placeholder="Descreva os achados do exame de ultrassonografia abdominal..."></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- DIAGNÓSTICO -->
-      <div class="form-section">
-        <div class="section-label">Impressão Diagnóstica</div>
-        <div class="form-group">
-          <label>Diagnóstico / Conclusão <span class="req">*</span></label>
-          <div class="editor-wrapper" id="wrapper-diagnostico">
-            <div class="editor-toolbar" id="toolbar-diagnostico">
-              <button type="button" class="toolbar-btn" data-cmd="bold" data-editor="diagnostico"><b>N</b></button>
-              <button type="button" class="toolbar-btn" data-cmd="italic" data-editor="diagnostico"><i>I</i></button>
-              <button type="button" class="toolbar-btn" data-cmd="underline" data-editor="diagnostico"><u>S</u></button>
-              <div class="toolbar-sep"></div>
-              <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList" data-editor="diagnostico">• Lista</button>
-              <button type="button" class="toolbar-btn" data-cmd="insertOrderedList" data-editor="diagnostico">1. Lista</button>
-              <div class="toolbar-sep"></div>
-              <button type="button" class="toolbar-btn" data-cmd="removeFormat" data-editor="diagnostico">Limpar</button>
-            </div>
-            <div class="editor-content" id="editor-diagnostico" contenteditable="true"
-              data-placeholder="Descreva a impressão diagnóstica e conclusões do exame..."></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- IMAGENS -->
-      <div class="form-section">
-        <div class="section-label">Imagens do Exame</div>
-        <div class="upload-area">
-          <input type="file" id="imagens" multiple accept="image/*">
-          <div class="upload-icon">🖼️</div>
-          <div class="upload-text">Clique ou arraste as imagens aqui</div>
-          <div class="upload-hint">JPG, PNG, WEBP · Múltiplos arquivos aceitos</div>
-        </div>
-        <div class="preview-grid" id="preview-grid"></div>
-      </div>
-
-      <button type="submit" class="btn-submit" id="btn-submit">Gerar Laudo em PDF</button>
-      <div class="loading-bar" id="loading-bar"><div class="loading-bar-inner"></div></div>
-      <div class="loading-text" id="loading-text">Gerando PDF, aguarde alguns segundos...</div>
-
-    </form>
+  <div class="topbar-right">
+    <div class="topbar-species" id="species-switcher"></div>
   </div>
 </div>
 
-<!-- PRÉVIA -->
+<!-- ═══════ FORM SCREEN ═══════ -->
+<div id="tela-form">
+  <div class="main-layout">
+
+    <!-- LEFT: FORM -->
+    <div class="panel-form">
+      <div class="form-title">Novo Laudo</div>
+      <div class="form-subtitle">Preencha as informações para gerar o relatório ultrassonográfico</div>
+
+      <form id="form-laudo">
+
+        <div class="form-section">
+          <div class="section-label">Identificação do Paciente</div>
+          <div class="form-row">
+            <div class="form-group"><label>Nome do Pet <span class="req">*</span></label><input type="text" name="nome_pet" required placeholder="Ex: Thor"></div>
+            <div class="form-group"><label>Nome do Tutor <span class="req">*</span></label><input type="text" name="nome_tutor" required placeholder="Ex: Claudia Silva"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Telefone <span class="req">*</span></label><input type="text" name="telefone" required placeholder="(51) 99999-9999"></div>
+            <div class="form-group"><label>Requisitante</label><input type="text" name="requisitante" placeholder="Ex: Belle Sorelle"></div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="section-label">Dados Clínicos</div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label>Espécie</label>
+              <select name="especie" id="sel-especie">
+                <option value="">Selecione</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Sexo</label>
+              <select name="sexo" id="sel-sexo">
+                <option value="">Selecione</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Raça</label><input type="text" name="raca" placeholder="Ex: SRD, Labrador"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Idade</label><input type="text" name="idade" placeholder="Ex: 3 anos"></div>
+            <div class="form-group"><label>Peso</label><input type="text" name="peso" placeholder="Ex: 16kg"></div>
+          </div>
+          <div class="form-group"><label>Suspeita Clínica</label><input type="text" name="suspeita" placeholder="Ex: Vômitos, dor abdominal"></div>
+        </div>
+
+        <!-- ORGAN SECTIONS (dynamic) -->
+        <div class="form-section">
+          <div class="section-label">Relatório Ultrassonográfico — Achados</div>
+          <div id="organs-container"></div>
+        </div>
+
+        <!-- IMPRESSÃO DIAGNÓSTICA -->
+        <div class="form-section">
+          <div class="section-label">Impressão Diagnóstica</div>
+          <div class="form-group">
+            <label>Diagnóstico / Conclusão <span class="req">*</span></label>
+            <div class="editor-wrapper">
+              <div class="editor-toolbar" id="toolbar-diagnostico">
+                <button type="button" class="toolbar-btn" data-cmd="bold" data-editor="diagnostico"><b>N</b></button>
+                <button type="button" class="toolbar-btn" data-cmd="italic" data-editor="diagnostico"><i>I</i></button>
+                <button type="button" class="toolbar-btn" data-cmd="underline" data-editor="diagnostico"><u>S</u></button>
+                <div class="toolbar-sep"></div>
+                <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList" data-editor="diagnostico">• Lista</button>
+                <button type="button" class="toolbar-btn" data-cmd="insertOrderedList" data-editor="diagnostico">1. Lista</button>
+                <div class="toolbar-sep"></div>
+                <button type="button" class="toolbar-btn" data-cmd="removeFormat" data-editor="diagnostico">Limpar</button>
+              </div>
+              <div class="editor-content" id="editor-diagnostico" contenteditable="true" data-placeholder="Descreva a impressão diagnóstica..."></div>
+            </div>
+          </div>
+          <div id="diag-suggestions" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px"></div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="btn-submit">Gerar Laudo em PDF</button>
+        <div class="loading-bar" id="loading-bar"><div class="loading-bar-inner"></div></div>
+        <div class="loading-text" id="loading-text">Gerando PDF, aguarde...</div>
+      </form>
+    </div>
+
+    <!-- RIGHT: IMAGE PANEL -->
+    <div class="panel-images">
+      <div class="images-header">
+        <div class="images-header-title">Imagens do Exame</div>
+        <div class="images-count" id="images-count">0</div>
+      </div>
+      <div class="thumb-strip" id="thumb-strip"></div>
+      <div class="image-viewer" id="image-viewer">
+        <div class="viewer-empty" id="viewer-empty">
+          <div class="viewer-empty-icon">🔬</div>
+          <div class="viewer-empty-text">Anexe imagens do exame</div>
+        </div>
+        <img id="viewer-img" style="display:none" draggable="false">
+        <div class="zoom-controls" id="zoom-controls" style="display:none">
+          <button class="zoom-btn" onclick="zoomChange(-0.25)" title="Zoom out">−</button>
+          <div class="zoom-level" id="zoom-level">100%</div>
+          <button class="zoom-btn" onclick="zoomChange(0.25)" title="Zoom in">+</button>
+          <button class="zoom-btn" onclick="zoomReset()" title="Resetar">⟲</button>
+        </div>
+      </div>
+      <div class="upload-zone">
+        <div class="upload-area" id="upload-area">
+          <input type="file" id="imagens" multiple accept="image/*">
+          <div class="upload-text">📷 Clique ou arraste imagens aqui</div>
+          <div class="upload-hint">JPG, PNG, WEBP · Múltiplos arquivos</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════ PREVIEW SCREEN ═══════ -->
 <div id="tela-previa">
   <div class="previa-header">
     <div class="previa-header-left">Laudo<span>Vet</span> · Prévia do PDF</div>
@@ -361,14 +428,12 @@
       <button class="btn-voltar" onclick="voltarForm()">← Novo laudo</button>
       <a id="btn-baixar" class="btn-baixar" download="laudo.pdf">⬇ Baixar PDF</a>
       <button class="btn-whatsapp" id="btn-whatsapp">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         Enviar pelo WhatsApp
       </button>
     </div>
   </div>
-  <div class="previa-body">
-    <iframe id="pdf-iframe" title="Prévia do Laudo"></iframe>
-  </div>
+  <div class="previa-body"><iframe id="pdf-iframe" title="Prévia do Laudo"></iframe></div>
   <div class="info-bar">
     <span>🐾 <strong id="info-pet">—</strong></span>
     <span>👤 <strong id="info-tutor">—</strong></span>
@@ -379,210 +444,677 @@
 </div>
 
 <script>
-  const WEBHOOK_URL = "https://n8n.srv1496054.hstgr.cloud/webhook/laudo-veterinaria";
-  const WEBHOOK_WHATSAPP = "https://n8n.srv1496054.hstgr.cloud/webhook/laudo-whatsapp";
-
-  let arquivosImagens = [];
-  let pdfBase64Atual = null;
-  let dadosAtuais = null;
-
-  // ── EDITOR RICO ──
-  document.querySelectorAll('.toolbar-btn[data-cmd]').forEach(btn => {
-    btn.addEventListener('mousedown', function(e) {
-      e.preventDefault();
-      const cmd = this.dataset.cmd;
-      const editorId = 'editor-' + this.dataset.editor;
-      document.getElementById(editorId).focus();
-      document.execCommand(cmd, false, null);
-      atualizarBotoes(this.dataset.editor);
-    });
-  });
-
-  document.querySelectorAll('.editor-content').forEach(editor => {
-    editor.addEventListener('keyup', () => {
-      const id = editor.id.replace('editor-', '');
-      atualizarBotoes(id);
-    });
-    editor.addEventListener('mouseup', () => {
-      const id = editor.id.replace('editor-', '');
-      atualizarBotoes(id);
-    });
-  });
-
-  function atualizarBotoes(editorName) {
-    const cmds = ['bold', 'italic', 'underline'];
-    cmds.forEach(cmd => {
-      const btn = document.querySelector(`.toolbar-btn[data-cmd="${cmd}"][data-editor="${editorName}"]`);
-      if (btn) btn.classList.toggle('active', document.queryCommandState(cmd));
-    });
+// ═══════════════════════════════════════════════════════════
+// TEMPLATES CONFIG — easy to add new species
+// ═══════════════════════════════════════════════════════════
+const TEMPLATES = {
+  canina: {
+    label: "🐕 Canino",
+    sexOptions: ["Macho", "Fêmea", "Macho castrado", "Fêmea castrada"],
+    organs: [
+      {
+        id: "figado", name: "Fígado",
+        text: `Em topografia habitual, dimensões preservadas e bordos afilados, contornos e margens definidos, superfície lisa, ecogenicidade mantida e ecotextura homogênea. Arquitetura vascular de calibre e trajetos preservados. Sem alterações em vias biliares intra e extra-hepáticas.`,
+        diag: "Imagens hepáticas sugerem:"
+      },
+      {
+        id: "vesicula", name: "Vesícula Biliar",
+        text: `Normodistendida, formato periforme, parede fina (<b>xx</b>) e regular, repleta por conteúdo anecogênico. Não há evidências ultrassonográficas de alterações em ductos biliares.`,
+        diag: "Imagens de VB sugerem:"
+      },
+      {
+        id: "pancreas", name: "Pâncreas",
+        text: `Normoespessado, medindo aproximadamente <b>xx</b>cm em lobo direito (N < 1,00 cm), contornos regulares, parênquima de ecogenicidade e ecotextura mantidas, nos segmentos passíveis de visibilização. Não há evidências de reatividade tecidual periférica.`,
+        altText: `Não individualizado neste exame, porém gordura adjacente sem alterações.`,
+        diag: "Imagens pancreáticas sugerem:"
+      },
+      {
+        id: "estomago", name: "Estômago",
+        text: `Em topografia habitual, preenchido por conteúdo de padrão gasoso/mucoso, apresenta paredes normoespessas (<b>xx</b>) e estratificação parietal preservada. Motilidade e progressão mantida durante esse exame.`,
+        diag: "Imagens gástricas sugerem:"
+      },
+      {
+        id: "intestino", name: "Alças Intestinais",
+        text: `Distribuição topográfica habitual nos segmentos passíveis de avaliação, preenchidas por conteúdo de padrão gasoso/mucoso, paredes normoespessas (duodeno <b>xx</b>cm, jejuno <b>xx</b>cm, cólon ascendente <b>xx</b>cm, cólon transverso <b>xx</b>cm, cólon descendente <b>xx</b>cm), estratificação parietal preservada, motilidade e progressão mantida durante esse exame. Cólon preenchido por conteúdo hiperecogênico produtor de sombreamento acústico posterior (fezes).`,
+        diag: "Imagens intestinais sugerem:"
+      },
+      {
+        id: "baco", name: "Baço",
+        text: `Em topografia habitual, contornos e margens definidos, dimensões preservadas e bordos afilados, parênquima de ecotextura homogênea e ecogenicidade mantida. Arquitetura vascular de calibre e trajetos preservados.`,
+        diag: "Imagens esplênicas sugerem:"
+      },
+      {
+        id: "rins", name: "Rins",
+        text: `Em topografias habituais, dimensões habituais (RE: <b>xx</b>cm; RD: <b>xx</b>cm), cápsulas preservadas, arquiteturas mantidas, boa relação e definição corticomedular, corticais normoespessas e ecogenicidade mantida. Sem evidências de dilatação de pelve e litíases.`,
+        diag: "Imagens renais sugerem:"
+      },
+      {
+        id: "adrenais", name: "Adrenais",
+        text: `Em topografia habitual, contornos regulares e dimensões habituais, parênquima homogêneo de ecogenicidade preservada. Adrenal esquerda medindo <b>xx</b>cm de comprimento, <b>xx</b>cm de polo caudal e <b>xx</b>cm de polo cranial. Adrenal direita medindo <b>xx</b>cm de comprimento, <b>xx</b>cm de polo caudal e <b>xx</b>cm de polo cranial.`,
+        altText: `Não individualizadas neste exame.`,
+        diag: "Imagens de adrenais sugerem:"
+      },
+      {
+        id: "bexiga", name: "Bexiga Urinária",
+        text: `Em topografia habitual, normodistendida, formato regular, parede normoespessa (<b>xx</b>), repleta por conteúdo anecogênico.`,
+        diag: "Imagens de bexiga urinária sugerem:"
+      },
+      {
+        id: "prostata", name: "Próstata",
+        text: `Em topografia habitual, simétrica, bilobada, dimensões preservadas (<b>xx</b>cm — comprimento x altura x largura), contornos regulares e definidos, ecotextura e ecogenicidade do parênquima preservados.`,
+        conditional: "macho"
+      },
+      {
+        id: "testiculos", name: "Testículos",
+        text: `Em topografia habitual, simétricos, dimensões preservadas (TE <b>xx</b>cm) (TD <b>xx</b>cm), com contornos regulares e definidos, ecotextura e ecogenicidade do parênquima mantida, linha mediastinal preservada.`,
+        conditional: "macho"
+      },
+      {
+        id: "ovarios", name: "Ovários",
+        text: `Em topografia habitual, dimensões preservadas (OE <b>xx</b>cm/OD <b>xx</b>cm), contornos regulares e definidos, parênquima de ecotextura e ecogenicidade mantida.`,
+        conditional: "femea"
+      },
+      {
+        id: "utero", name: "Corpo e Cornos Uterinos",
+        text: `De dimensões normais, medindo aproximadamente <b>xx</b>cm em corpo uterino, <b>xx</b>cm em corno uterino esquerdo e <b>xx</b>cm em corno uterino direito, com paredes normoespessas, sem evidências de conteúdo intraluminal.`,
+        conditional: "femea"
+      },
+      {
+        id: "linfonodos", name: "Linfonodos",
+        text: `Sem sinais de alterações ultrassonográficas neste exame.`
+      },
+      {
+        id: "obs", name: "Observações",
+        text: `Não há evidências de presença de líquido/gás livre intra-abdominais.\nPaciente colaborativo durante o exame.`
+      }
+    ]
+  },
+  felina: {
+    label: "🐈 Felino",
+    sexOptions: ["Macho", "Fêmea", "Macho castrado", "Fêmea castrada"],
+    organs: [
+      {
+        id: "figado", name: "Fígado",
+        text: `Em topografia habitual, dimensões preservadas, contornos e margens definidos, parênquima homogêneo, ecotextura lisa e ecogenicidade mantida. Arquitetura vascular de calibre e trajetos preservados. Sem alterações em vias biliares intra e extra-hepáticas.`,
+        diag: "Imagens hepáticas sugerem:"
+      },
+      {
+        id: "vesicula", name: "Vesícula Biliar",
+        text: `Normodistendida, formato piriforme, parede fina (<b>xx</b>) (N: até 0,1 cm) e regular, repleta por conteúdo anecogênico. Não há evidências ultrassonográficas de alterações em ductos biliares. (N: até 0,4 cm).`,
+        diag: "Imagens de VB sugerem:"
+      },
+      {
+        id: "pancreas", name: "Pâncreas",
+        text: `Normoespessado, medindo aproximadamente <b>xx</b> em lobo esquerdo (N: ± 0,70 cm), contornos regulares, parênquima de ecogenicidade e ecotextura mantidas. Ducto pancreático normoespesso (<b>xx</b>) (N: 0,25cm). Não há evidências de reatividade tecidual periférica.`,
+        altText: `Não individualizado neste exame, porém gordura adjacente sem alterações.`,
+        diag: "Imagens pancreáticas sugerem:"
+      },
+      {
+        id: "estomago", name: "Estômago",
+        text: `Em topografia habitual, preenchido por conteúdo de padrão gasoso/mucoso, apresenta paredes normoespessadas (<b>xx</b>) e estratificação parietal preservada (nas regiões passíveis de visibilização). Motilidade e progressão mantida durante esse exame.`,
+        diag: "Imagens gástricas sugerem:"
+      },
+      {
+        id: "intestino", name: "Alças Intestinais",
+        text: `Distribuição topográfica habitual, nos segmentos de alças passíveis de avaliação, preenchidas por conteúdo de padrão gasoso/mucoide, paredes normoespessas, estratificação parietal preservada, motilidade e progressão mantida durante esse exame. Cólon preenchido por conteúdo hiperecogênico produtor de sombra acústica posterior (fezes).`,
+        diag: "Imagens intestinais sugerem:",
+        giTable: true,
+        giSegments: [
+          { name: "Fundo gástrico", ref: "0,20 cm (0,17 - 0,22 cm)" },
+          { name: "Piloro", ref: "0,21 cm (0,1 - 0,24 cm)" },
+          { name: "Duodeno", ref: "0,22 cm (0,2 - 0,24 cm)" },
+          { name: "Papila duodenal", ref: "0,25 cm x 0,15cm" },
+          { name: "Jejuno", ref: "0,23 cm (0,21 - 0,25 cm)" },
+          { name: "Íleo distal", ref: "0,32 cm" },
+          { name: "Junção ileocecocólica (JICC)", ref: "0,32 cm" },
+          { name: "Ceco", ref: "0,25 - 0,30 cm" },
+          { name: "Cólon ascendente", ref: "0,15 cm (0,14 - 0,17 cm)" },
+          { name: "Cólon descendente", ref: "0,15 cm (0,14 - 0,17 cm)" }
+        ]
+      },
+      {
+        id: "baco", name: "Baço",
+        text: `Em topografia habitual, dimensões preservadas (<b>xx</b>)(N<0,91 cm), contornos e margens definidos, bordos afilados, parênquima homogêneo e ecogenicidade mantida. Vascularização preservada.`,
+        diag: "Imagens esplênicas sugerem:"
+      },
+      {
+        id: "rins", name: "Rins",
+        text: `Em topografias habituais, dimensões habituais RE: <b>xx</b>cm; RD: <b>xx</b>cm (N: 3,8 – 4,4 cm), cápsulas preservadas, arquiteturas mantidas, com boa relação e definição corticomedular, corticais normoespessas com ecogenicidade mantida, pelves renais dentro da normalidade (N<0,2 cm). Sem sinais de litíase.`,
+        diag: "Imagens renais sugerem:"
+      },
+      {
+        id: "adrenais", name: "Glândulas Adrenais",
+        text: `Em topografia habitual, contornos regulares, parênquima homogêneo de ecogenicidade preservada, dimensões habituais (N: 0,36 ± 0,07 cm). Adrenal esquerda medindo <b>xx</b>cm de comprimento e <b>xx</b>cm de polo caudal. Adrenal direita medindo <b>xx</b>cm de comprimento e <b>xx</b>cm de polo caudal.`,
+        altText: `Não individualizadas neste exame.`,
+        diag: "Imagens de adrenais sugerem:"
+      },
+      {
+        id: "bexiga", name: "Bexiga Urinária",
+        text: `Em topografia habitual, formato regular, normodistendida, parede normoespessa (<b>xx</b>) (N: 0,13 - 0,17 cm), repleta por conteúdo anecogênico.`,
+        diag: "Imagens de bexiga urinária sugerem:"
+      },
+      {
+        id: "utero", name: "Útero",
+        text: `Visibilizado em topografia de corpo e cornos uterinos, com paredes normoespessas, medindo aproximadamente <b>xx</b>cm em corpo uterino, <b>xx</b>cm em corno uterino esquerdo e <b>xx</b>cm em corno uterino direito, sem evidências de conteúdo intraluminal.`,
+        conditional: "femea"
+      },
+      {
+        id: "ovarios", name: "Ovários",
+        text: `Em topografia habitual, dimensões mantidas (OE <b>xx</b>cm/OD <b>xx</b>cm), contornos regulares e definidos, parênquima de ecotextura e ecogenicidade preservadas.`,
+        altText: `Ovários, corpo e cornos uterinos: Não individualizados neste exame.`,
+        conditional: "femea"
+      },
+      {
+        id: "testiculos", name: "Testículos",
+        text: `Em topografia habitual, simétricos, dimensões normais (TE <b>xx</b>cm) (TD <b>xx</b>cm), com contornos regulares e definidos, parênquima de ecotextura e ecogenicidade preservada, linha mediastinal preservada.`,
+        altText: `Não individualizados neste exame.`,
+        conditional: "macho"
+      },
+      {
+        id: "linfonodos", name: "Linfonodos",
+        text: `Sem sinais de alterações ultrassonográficas neste exame.`
+      },
+      {
+        id: "obs", name: "Observações",
+        text: `Não há evidências de presença de líquido/gás livre intra-abdominais.\nPaciente colaborativo durante o exame.`
+      }
+    ]
   }
+};
 
-  // ── IMAGENS ──
-  document.getElementById("imagens").addEventListener("change", function() {
-    const novos = Array.from(this.files);
-    novos.forEach(file => {
-      if (!arquivosImagens.find(f => f.name === file.name && f.size === file.size)) {
-        arquivosImagens.push(file);
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+const WEBHOOK_URL = "https://n8n.srv1496054.hstgr.cloud/webhook/laudo-veterinaria";
+const WEBHOOK_ENVIAR = "https://n8n.srv1496054.hstgr.cloud/webhook/laudo-enviar";
+
+let currentSpecies = "canina";
+let arquivosImagens = [];
+let currentImageIndex = -1;
+let zoomScale = 1;
+let pdfBase64Atual = null;
+let dadosAtuais = null;
+
+// Pan state
+let isPanning = false;
+let panStart = { x: 0, y: 0 };
+let panOffset = { x: 0, y: 0 };
+
+// ═══════════════════════════════════════════════════════════
+// SPECIES SWITCHER
+// ═══════════════════════════════════════════════════════════
+function buildSpeciesSwitcher() {
+  const container = document.getElementById("species-switcher");
+  container.innerHTML = "";
+  Object.entries(TEMPLATES).forEach(([key, tmpl]) => {
+    const btn = document.createElement("button");
+    btn.className = "species-btn" + (key === currentSpecies ? " active" : "");
+    btn.textContent = tmpl.label;
+    btn.onclick = () => switchSpecies(key);
+    container.appendChild(btn);
+  });
+}
+
+function switchSpecies(species) {
+  if (species === currentSpecies) return;
+  currentSpecies = species;
+  buildSpeciesSwitcher();
+  buildSexOptions();
+  buildOrgans();
+  updateOrganVisibility();
+}
+
+// ═══════════════════════════════════════════════════════════
+// SEX OPTIONS (dynamic per species)
+// ═══════════════════════════════════════════════════════════
+function buildSexOptions() {
+  const sel = document.getElementById("sel-sexo");
+  const tmpl = TEMPLATES[currentSpecies];
+  sel.innerHTML = '<option value="">Selecione</option>';
+  tmpl.sexOptions.forEach(opt => {
+    const o = document.createElement("option");
+    o.value = opt; o.textContent = opt;
+    sel.appendChild(o);
+  });
+  // Also sync species select
+  const selEsp = document.getElementById("sel-especie");
+  selEsp.innerHTML = '<option value="">Selecione</option>';
+  Object.entries(TEMPLATES).forEach(([key, t]) => {
+    const o = document.createElement("option");
+    o.value = t.label.replace(/[^\w\s]/g, '').trim();
+    o.textContent = t.label;
+    if (key === currentSpecies) o.selected = true;
+    selEsp.appendChild(o);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// BUILD ORGAN SECTIONS
+// ═══════════════════════════════════════════════════════════
+function buildOrgans() {
+  const container = document.getElementById("organs-container");
+  container.innerHTML = "";
+  const tmpl = TEMPLATES[currentSpecies];
+
+  tmpl.organs.forEach(organ => {
+    const section = document.createElement("div");
+    section.className = "organ-section";
+    section.dataset.organId = organ.id;
+    if (organ.conditional) section.dataset.conditional = organ.conditional;
+
+    let bodyHTML = `<div class="organ-default-text">${organ.text.replace(/\n/g, '<br>')}</div>`;
+
+    // GI Table for feline
+    if (organ.giTable && organ.giSegments) {
+      bodyHTML += `<div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--teal-dark);margin:10px 0 4px;display:flex;align-items:center;gap:4px">📊 Tabela de referência — vai para o PDF</div>`;
+      bodyHTML += `<table class="gi-table"><thead><tr><th>Segmento GI</th><th>Medida</th><th>Valor de Referência</th></tr></thead><tbody>`;
+      organ.giSegments.forEach(seg => {
+        bodyHTML += `<tr><td>${seg.name}</td><td><input type="text" class="gi-input" data-seg="${seg.name}" placeholder="cm"></td><td class="gi-ref">${seg.ref}</td></tr>`;
+      });
+      bodyHTML += `</tbody></table>`;
+    }
+
+    bodyHTML += `
+      <div class="editor-wrapper">
+        <div class="editor-toolbar">
+          <button type="button" class="toolbar-btn" data-cmd="bold" data-editor="organ-${organ.id}"><b>N</b></button>
+          <button type="button" class="toolbar-btn" data-cmd="italic" data-editor="organ-${organ.id}"><i>I</i></button>
+          <button type="button" class="toolbar-btn" data-cmd="underline" data-editor="organ-${organ.id}"><u>S</u></button>
+          <div class="toolbar-sep"></div>
+          <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList" data-editor="organ-${organ.id}">• Lista</button>
+          <div class="toolbar-sep"></div>
+          <button type="button" class="toolbar-btn" data-cmd="removeFormat" data-editor="organ-${organ.id}">Limpar</button>
+        </div>
+        <div class="editor-content" id="editor-organ-${organ.id}" contenteditable="true"
+          data-placeholder="Descreva os achados de ${organ.name}..."></div>
+      </div>`;
+
+    section.innerHTML = `
+      <div class="organ-header" onclick="toggleOrgan(this)">
+        <span class="organ-toggle">▶</span>
+        <span class="organ-name">${organ.name}</span>
+        <span class="organ-status" id="status-${organ.id}">Vazio</span>
+      </div>
+      <div class="organ-body">${bodyHTML}</div>`;
+
+    container.appendChild(section);
+  });
+
+  // Bind toolbar buttons for new organs
+  bindToolbarButtons();
+  // Track edits
+  bindOrganEditors();
+  // Build diagnostic suggestions
+  buildDiagSuggestions();
+}
+
+function toggleOrgan(header) {
+  header.parentElement.classList.toggle("open");
+}
+
+function bindOrganEditors() {
+  document.querySelectorAll('[id^="editor-organ-"]').forEach(editor => {
+    editor.addEventListener('input', () => {
+      const organId = editor.id.replace('editor-organ-', '');
+      const status = document.getElementById('status-' + organId);
+      if (editor.innerHTML.trim()) {
+        status.textContent = 'Preenchido';
+        status.className = 'organ-status edited';
+      } else {
+        status.textContent = 'Vazio';
+        status.className = 'organ-status';
       }
     });
-    this.value = "";
-    renderizarPreviews();
   });
+}
 
-  function renderizarPreviews() {
-    const grid = document.getElementById("preview-grid");
-    grid.innerHTML = "";
-    arquivosImagens.forEach((file, index) => {
+function buildDiagSuggestions() {
+  const container = document.getElementById("diag-suggestions");
+  container.innerHTML = "";
+  const tmpl = TEMPLATES[currentSpecies];
+  tmpl.organs.filter(o => o.diag).forEach(o => {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.style.cssText = "padding:4px 10px;border:1px solid var(--border);border-radius:99px;font-size:10px;font-family:'DM Sans',sans-serif;cursor:pointer;background:var(--white);color:var(--slate-mid);transition:all .15s";
+    chip.textContent = "+ " + o.name;
+    chip.onmouseenter = () => { chip.style.borderColor = 'var(--teal)'; chip.style.color = 'var(--teal)'; };
+    chip.onmouseleave = () => { chip.style.borderColor = 'var(--border)'; chip.style.color = 'var(--slate-mid)'; };
+    chip.onclick = () => {
+      const editor = document.getElementById("editor-diagnostico");
+      const bullet = `<li><strong>${o.diag}</strong> </li>`;
+      if (!editor.innerHTML.includes('<ul>')) {
+        editor.innerHTML = '<ul>' + bullet + '</ul>';
+      } else {
+        editor.innerHTML = editor.innerHTML.replace('</ul>', bullet + '</ul>');
+      }
+      editor.focus();
+    };
+    container.appendChild(chip);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// CONDITIONAL ORGANS (sex-based visibility)
+// ═══════════════════════════════════════════════════════════
+document.getElementById("sel-sexo").addEventListener("change", updateOrganVisibility);
+
+function updateOrganVisibility() {
+  const sexo = document.getElementById("sel-sexo").value.toLowerCase();
+  const isMacho = sexo.includes("macho");
+  const isFemea = sexo.includes("fêmea") || sexo.includes("femea");
+
+  document.querySelectorAll('.organ-section[data-conditional]').forEach(section => {
+    const cond = section.dataset.conditional;
+    if (cond === "macho") section.style.display = (!sexo || isMacho) ? "" : "none";
+    else if (cond === "femea") section.style.display = (!sexo || isFemea) ? "" : "none";
+  });
+}
+
+// Species select sync
+document.getElementById("sel-especie").addEventListener("change", function() {
+  const val = this.value.toLowerCase();
+  if (val.includes("canin")) switchSpecies("canina");
+  else if (val.includes("felin")) switchSpecies("felina");
+});
+
+// ═══════════════════════════════════════════════════════════
+// RICH EDITOR TOOLBAR
+// ═══════════════════════════════════════════════════════════
+function bindToolbarButtons() {
+  document.querySelectorAll('.toolbar-btn[data-cmd]').forEach(btn => {
+    btn.onmousedown = function(e) {
+      e.preventDefault();
+      const editorId = 'editor-' + this.dataset.editor;
+      const ed = document.getElementById(editorId);
+      if (ed) ed.focus();
+      document.execCommand(this.dataset.cmd, false, null);
+    };
+  });
+}
+bindToolbarButtons();
+
+// ═══════════════════════════════════════════════════════════
+// IMAGE HANDLING + ZOOM + PAN
+// ═══════════════════════════════════════════════════════════
+const imgInput = document.getElementById("imagens");
+const uploadArea = document.getElementById("upload-area");
+
+imgInput.addEventListener("change", function() {
+  addFiles(Array.from(this.files));
+  this.value = "";
+});
+
+// Drag & drop
+uploadArea.addEventListener("dragover", e => { e.preventDefault(); uploadArea.classList.add("dragover"); });
+uploadArea.addEventListener("dragleave", () => uploadArea.classList.remove("dragover"));
+uploadArea.addEventListener("drop", e => {
+  e.preventDefault(); uploadArea.classList.remove("dragover");
+  addFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith("image/")));
+});
+
+function addFiles(files) {
+  files.forEach(file => {
+    if (!arquivosImagens.find(f => f.name === file.name && f.size === file.size)) {
       const reader = new FileReader();
       reader.onload = e => {
-        const item = document.createElement("div");
-        item.className = "preview-item";
-        item.innerHTML = `
-          <img src="${e.target.result}" alt="Imagem ${index + 1}">
-          <button type="button" class="preview-remove" onclick="removerImagem(${index})">×</button>
-        `;
-        grid.appendChild(item);
+        file._dataUrl = e.target.result;
+        arquivosImagens.push(file);
+        renderThumbs();
+        if (arquivosImagens.length === 1) selectImage(0);
       };
       reader.readAsDataURL(file);
-    });
-  }
-
-  function removerImagem(index) {
-    arquivosImagens.splice(index, 1);
-    renderizarPreviews();
-  }
-
-  // ── SUBMIT ──
-  document.getElementById("form-laudo").addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    const achados = document.getElementById("editor-achados").innerHTML.trim();
-    const diagnostico = document.getElementById("editor-diagnostico").innerHTML.trim();
-
-    if (!achados || achados === '') {
-      alert("Preencha a descrição dos achados.");
-      return;
     }
-    if (!diagnostico || diagnostico === '') {
-      alert("Preencha a impressão diagnóstica.");
-      return;
-    }
+  });
+}
 
-    const btn = document.getElementById("btn-submit");
-    const loadingBar = document.getElementById("loading-bar");
-    const loadingText = document.getElementById("loading-text");
+function renderThumbs() {
+  const strip = document.getElementById("thumb-strip");
+  strip.innerHTML = "";
+  document.getElementById("images-count").textContent = arquivosImagens.length;
 
-    btn.disabled = true;
-    btn.textContent = "Gerando PDF...";
-    loadingBar.classList.add("show");
-    loadingText.classList.add("show");
+  arquivosImagens.forEach((file, i) => {
+    const item = document.createElement("div");
+    item.className = "thumb-item" + (i === currentImageIndex ? " active" : "");
+    item.innerHTML = `<img src="${file._dataUrl}"><div class="thumb-remove" onclick="event.stopPropagation();removeImage(${i})">×</div>`;
+    item.onclick = () => selectImage(i);
+    strip.appendChild(item);
+  });
+}
 
+function removeImage(index) {
+  arquivosImagens.splice(index, 1);
+  if (currentImageIndex >= arquivosImagens.length) currentImageIndex = arquivosImagens.length - 1;
+  if (arquivosImagens.length === 0) currentImageIndex = -1;
+  renderThumbs();
+  showCurrentImage();
+}
+
+function selectImage(index) {
+  currentImageIndex = index;
+  zoomScale = 1; panOffset = { x: 0, y: 0 };
+  renderThumbs();
+  showCurrentImage();
+}
+
+function showCurrentImage() {
+  const img = document.getElementById("viewer-img");
+  const empty = document.getElementById("viewer-empty");
+  const controls = document.getElementById("zoom-controls");
+
+  if (currentImageIndex >= 0 && arquivosImagens[currentImageIndex]) {
+    img.src = arquivosImagens[currentImageIndex]._dataUrl;
+    img.style.display = "block";
+    empty.style.display = "none";
+    controls.style.display = "flex";
+    applyTransform();
+  } else {
+    img.style.display = "none";
+    empty.style.display = "flex";
+    controls.style.display = "none";
+  }
+}
+
+// Zoom
+function zoomChange(delta) {
+  zoomScale = Math.max(0.25, Math.min(5, zoomScale + delta));
+  applyTransform();
+}
+function zoomReset() {
+  zoomScale = 1; panOffset = { x: 0, y: 0 };
+  applyTransform();
+}
+function applyTransform() {
+  const img = document.getElementById("viewer-img");
+  img.style.transform = `translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoomScale})`;
+  document.getElementById("zoom-level").textContent = Math.round(zoomScale * 100) + "%";
+}
+
+// Mouse wheel zoom
+document.getElementById("image-viewer").addEventListener("wheel", e => {
+  if (currentImageIndex < 0) return;
+  e.preventDefault();
+  zoomChange(e.deltaY < 0 ? 0.15 : -0.15);
+}, { passive: false });
+
+// Pan with mouse drag
+const viewer = document.getElementById("image-viewer");
+viewer.addEventListener("mousedown", e => {
+  if (currentImageIndex < 0 || zoomScale <= 1) return;
+  isPanning = true; viewer.classList.add("dragging");
+  panStart = { x: e.clientX - panOffset.x, y: e.clientY - panOffset.y };
+});
+window.addEventListener("mousemove", e => {
+  if (!isPanning) return;
+  panOffset = { x: e.clientX - panStart.x, y: e.clientY - panStart.y };
+  applyTransform();
+});
+window.addEventListener("mouseup", () => { isPanning = false; viewer.classList.remove("dragging"); });
+
+// Keyboard: arrow keys to navigate images
+document.addEventListener("keydown", e => {
+  if (arquivosImagens.length === 0) return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+  if (e.key === "ArrowRight") selectImage(Math.min(currentImageIndex + 1, arquivosImagens.length - 1));
+  else if (e.key === "ArrowLeft") selectImage(Math.max(currentImageIndex - 1, 0));
+});
+
+// ═══════════════════════════════════════════════════════════
+// FORM SUBMIT
+// ═══════════════════════════════════════════════════════════
+document.getElementById("form-laudo").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById("btn-submit");
+  const loadingBar = document.getElementById("loading-bar");
+  const loadingText = document.getElementById("loading-text");
+
+  btn.disabled = true; btn.textContent = "Gerando PDF...";
+  loadingBar.classList.add("show"); loadingText.classList.add("show");
+
+  try {
     const formData = new FormData(this);
-    const imagensBase64 = [];
 
+    // Collect achados from all organs
+    const tmpl = TEMPLATES[currentSpecies];
+    let achadosHTML = "";
+    tmpl.organs.forEach(organ => {
+      const section = document.querySelector(`.organ-section[data-organ-id="${organ.id}"]`);
+      if (section && section.style.display === "none") return;
+
+      const editor = document.getElementById(`editor-organ-${organ.id}`);
+      const customText = editor ? editor.innerHTML.trim() : "";
+
+      // GI table — always include in PDF for feline
+      let giTableHTML = "";
+      if (organ.giTable && organ.giSegments) {
+        const inputs = section.querySelectorAll('.gi-input');
+        giTableHTML = '<table style="width:100%;border-collapse:collapse;margin:8px 0;font-size:10px"><tr style="background:#1a3a5c;color:#fff"><td style="padding:4px 8px;font-weight:600">Segmento GI</td><td style="padding:4px 8px;font-weight:600">Medida</td><td style="padding:4px 8px;font-weight:600">Valor de Referência</td></tr>';
+        organ.giSegments.forEach((seg, i) => {
+          const val = inputs[i] ? inputs[i].value.trim() : '—';
+          const bg = i % 2 === 0 ? '#f8fafc' : '#fff';
+          giTableHTML += `<tr style="background:${bg}"><td style="padding:4px 8px;border-bottom:1px solid #e2e8f0">${seg.name}</td><td style="padding:4px 8px;border-bottom:1px solid #e2e8f0"><b>${val}</b></td><td style="padding:4px 8px;border-bottom:1px solid #e2e8f0;color:#94a3b8">${seg.ref}</td></tr>`;
+        });
+        giTableHTML += '</table>';
+      }
+
+      // Only include organ if editor has content OR it has a GI table
+      if (customText || giTableHTML) {
+        achadosHTML += `<p><b>${organ.name}:</b> ${customText}</p>`;
+        if (giTableHTML) achadosHTML += giTableHTML;
+      }
+    });
+
+    const diagnostico = document.getElementById("editor-diagnostico").innerHTML.trim();
+    if (!diagnostico) { alert("Preencha a impressão diagnóstica."); return; }
+
+    // Images to base64
+    const imagensBase64 = [];
     for (const file of arquivosImagens) {
-      const base64 = await toBase64(file);
-      imagensBase64.push({ data: base64.split(",")[1], mimetype: file.type, filename: file.name });
+      const base64 = file._dataUrl.split(",")[1];
+      imagensBase64.push({ data: base64, mimetype: file.type, filename: file.name });
     }
 
     const payload = {
-      nome_pet:     formData.get("nome_pet"),
-      nome_tutor:   formData.get("nome_tutor"),
-      telefone:     formData.get("telefone").replace(/\D/g, ""),
+      nome_pet: formData.get("nome_pet"),
+      nome_tutor: formData.get("nome_tutor"),
+      telefone: formData.get("telefone").replace(/\D/g, ""),
       requisitante: formData.get("requisitante"),
-      especie:      formData.get("especie"),
-      sexo:         formData.get("sexo"),
-      raca:         formData.get("raca"),
-      idade:        formData.get("idade"),
-      peso:         formData.get("peso"),
-      suspeita:     formData.get("suspeita"),
-      achados:      achados,
-      diagnostico:  diagnostico,
-      imagens:      imagensBase64
+      especie: formData.get("especie"),
+      sexo: formData.get("sexo"),
+      raca: formData.get("raca"),
+      idade: formData.get("idade"),
+      peso: formData.get("peso"),
+      suspeita: formData.get("suspeita"),
+      achados: achadosHTML,
+      diagnostico: diagnostico,
+      imagens: imagensBase64
     };
 
+    const response = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) throw new Error("Erro ao gerar PDF");
+
+    const blob = await response.blob();
+    const arrayBuffer = await blob.arrayBuffer();
+    const bytes = new Uint8Array(arrayBuffer);
+    let binary = ''; bytes.forEach(b => binary += String.fromCharCode(b));
+    pdfBase64Atual = btoa(binary);
+
+    const pdfUrl = URL.createObjectURL(blob);
+    dadosAtuais = payload;
+    mostrarPrevia(pdfUrl, payload);
+
+  } catch (err) {
+    alert("Erro ao gerar o laudo. Tente novamente.\n" + err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = "Gerar Laudo em PDF";
+    loadingBar.classList.remove("show"); loadingText.classList.remove("show");
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
+// PREVIEW + WHATSAPP
+// ═══════════════════════════════════════════════════════════
+function mostrarPrevia(pdfUrl, dados) {
+  document.getElementById("pdf-iframe").src = pdfUrl;
+  const btnBaixar = document.getElementById("btn-baixar");
+  btnBaixar.href = pdfUrl;
+  btnBaixar.download = `laudo_${dados.nome_pet}_${Date.now()}.pdf`;
+
+  const btnWpp = document.getElementById("btn-whatsapp");
+  btnWpp.disabled = false;
+  btnWpp.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Enviar pelo WhatsApp`;
+
+  btnWpp.onclick = async () => {
+    btnWpp.disabled = true;
+    btnWpp.textContent = "Enviando...";
     try {
-      const response = await fetch(WEBHOOK_URL, {
+      const resp = await fetch(WEBHOOK_ENVIAR, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          telefone: dados.telefone,
+          nome_tutor: dados.nome_tutor,
+          nome_pet: dados.nome_pet,
+          pdf_base64: pdfBase64Atual
+        })
       });
-      if (!response.ok) throw new Error("Erro ao gerar PDF");
-
-      const blob = await response.blob();
-      const arrayBuffer = await blob.arrayBuffer();
-      const bytes = new Uint8Array(arrayBuffer);
-      let binary = '';
-      bytes.forEach(b => binary += String.fromCharCode(b));
-      pdfBase64Atual = btoa(binary);
-
-      const pdfUrl = URL.createObjectURL(blob);
-      dadosAtuais = payload;
-      mostrarPrevia(pdfUrl, payload);
-
-    } catch (err) {
-      alert("Erro ao gerar o laudo. Tente novamente.\n" + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Gerar Laudo em PDF";
-      loadingBar.classList.remove("show");
-      loadingText.classList.remove("show");
+      if (!resp.ok) throw new Error("Falha no envio");
+      btnWpp.textContent = "✅ Enviado!";
+      document.getElementById("wpp-status").style.display = "inline-block";
+    } catch(e) {
+      btnWpp.disabled = false;
+      btnWpp.textContent = "❌ Erro — tentar novamente";
     }
-  });
+  };
 
-  function toBase64(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
+  document.getElementById("info-pet").textContent = dados.nome_pet;
+  document.getElementById("info-tutor").textContent = dados.nome_tutor;
+  document.getElementById("info-tel").textContent = dados.telefone || "—";
+  document.getElementById("info-data").textContent = new Date().toLocaleString("pt-BR");
 
-  function mostrarPrevia(pdfUrl, dados) {
-    document.getElementById("pdf-iframe").src = pdfUrl;
-    const btnBaixar = document.getElementById("btn-baixar");
-    btnBaixar.href = pdfUrl;
-    btnBaixar.download = `laudo_${dados.nome_pet}_${Date.now()}.pdf`;
+  document.getElementById("tela-form").style.display = "none";
+  document.getElementById("tela-previa").style.display = "flex";
+  document.getElementById("tela-previa").style.flexDirection = "column";
+}
 
-    const btnWpp = document.getElementById("btn-whatsapp");
-    btnWpp.disabled = false;
-    btnWpp.onclick = async () => {
-      btnWpp.disabled = true;
-      btnWpp.textContent = "Enviando...";
-      try {
-        await fetch(WEBHOOK_WHATSAPP, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            telefone: dados.telefone, nome_tutor: dados.nome_tutor,
-            nome_pet: dados.nome_pet, pdf_base64: pdfBase64Atual
-          })
-        });
-        btnWpp.textContent = "✅ Enviado!";
-        document.getElementById("wpp-status").style.display = "inline-block";
-      } catch(e) {
-        btnWpp.disabled = false;
-        btnWpp.textContent = "❌ Erro — tentar novamente";
-      }
-    };
+function voltarForm() {
+  document.getElementById("tela-previa").style.display = "none";
+  document.getElementById("tela-form").style.display = "block";
+  document.getElementById("wpp-status").style.display = "none";
+  pdfBase64Atual = null; dadosAtuais = null;
+}
 
-    document.getElementById("info-pet").textContent = dados.nome_pet;
-    document.getElementById("info-tutor").textContent = dados.nome_tutor;
-    document.getElementById("info-tel").textContent = dados.telefone || "—";
-    document.getElementById("info-data").textContent = new Date().toLocaleString("pt-BR");
-
-    document.getElementById("tela-form").style.display = "none";
-    document.getElementById("tela-previa").style.display = "flex";
-    document.getElementById("tela-previa").style.flexDirection = "column";
-  }
-
-  function voltarForm() {
-    document.getElementById("tela-previa").style.display = "none";
-    document.getElementById("tela-form").style.display = "flex";
-    document.getElementById("wpp-status").style.display = "none";
-    pdfBase64Atual = null; dadosAtuais = null;
-  }
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+buildSpeciesSwitcher();
+buildSexOptions();
+buildOrgans();
+updateOrganVisibility();
 </script>
 </body>
 </html>
